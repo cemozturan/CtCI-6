@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
-  cem() {
-    return false;
-  }
   render() {
     return (
       <div className="App">
