@@ -20,7 +20,7 @@ const isUniqueWithoutDataStructures = function(str) {
     }
   }
   return true;
-}
+};
 
 export {
   isUniqueWithHashTable,

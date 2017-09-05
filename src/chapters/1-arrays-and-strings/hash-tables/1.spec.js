@@ -18,26 +18,26 @@ describe('Ch1-Q1: IsUnique', function() {
   ];
 
   uniqueCases.forEach(testCase => {
-    it(`returns true for unique strings using a hash table: ${testCase}`, () => {
-      let resultWithHashTable = isUniqueWithHashTable(testCase);
-      expect(resultWithHashTable).toBe(true);
+    it(`returns true for unique strings using a hash table: '${testCase}'`, () => {
+      let result = isUniqueWithHashTable(testCase);
+      expect(result).toBe(true);
     });
 
-    it(`returns true for unique strings without using a data structure: ${testCase}`, () => {
-      let resultWithoutDataStructures = isUniqueWithoutDataStructures(testCase);
-      expect(resultWithoutDataStructures).toBe(true);
+    it(`returns true for unique strings without using a data structure: '${testCase}'`, () => {
+      let result = isUniqueWithoutDataStructures(testCase);
+      expect(result).toBe(true);
     });
   });
 
   nonUniqueCases.forEach(testCase => {
-    it(`returns false for strings with duplicate characters using a hash table: ${testCase}`, () => {
-      let resultWithHashTable = isUniqueWithHashTable(testCase);
-      expect(resultWithHashTable).toBe(false);
+    it(`returns false for strings with duplicate characters using a hash table: '${testCase}'`, () => {
+      let result = isUniqueWithHashTable(testCase);
+      expect(result).toBe(false);
     });
 
-    it(`returns false for strings with duplicate characters without using a data structure: ${testCase}`, () => {
-      let resultWithoutDataStructures = isUniqueWithoutDataStructures(testCase);
-      expect(resultWithoutDataStructures).toBe(false);
+    it(`returns false for strings with duplicate characters without using a data structure: '${testCase}'`, () => {
+      let result = isUniqueWithoutDataStructures(testCase);
+      expect(result).toBe(false);
     });
   });
 })
