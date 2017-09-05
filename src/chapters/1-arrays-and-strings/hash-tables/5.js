@@ -15,7 +15,7 @@ const isOneAway = function(str1, str2) {
 const equalLengthStringsOneAway = function(str1, str2) {
   let differenceFound = false;
   for (let i = 0; i < str1.length; i++) {
-    if (str1[i] !== str2[i]) {
+    if (str1.charAt(i) !== str2.charAt(i)) {
       if (differenceFound) {
         return false;
       }
@@ -27,7 +27,7 @@ const equalLengthStringsOneAway = function(str1, str2) {
 
 const isOneInsertOrRemoveAway = function(shorter, longer) {
   for (let index1 = 0, index2 = 0; index2 < longer.length;) {
-    if (shorter[index1] !== longer[index2]) {
+    if (shorter.charAt(index1) !== longer.charAt(index2)) {
       if (index1 !== index2) {
         return false;
       }
