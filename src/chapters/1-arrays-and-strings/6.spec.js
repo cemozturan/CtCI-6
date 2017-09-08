@@ -1,6 +1,6 @@
 import stringCompression from './6';
 
-describe('Ch1-Q6: func', function() {
+describe('Ch1-Q6: String Compression', function() {
   const notCompressed = [
     '',
     null,
