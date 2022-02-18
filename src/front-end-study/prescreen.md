@@ -11,7 +11,39 @@
 
 ### 2) Explain prototypical inheritance
 
-Answer goes here
+In JavaScript, objects have a special hidden property `[[Prototype]]` (as named in the specification), that is either null or references another object. That object is called “a prototype”.
+
+When we read a property from object, and it’s missing, JavaScript automatically takes it from the prototype. In programming, this is called “prototypal inheritance”.
+
+The property `[[Prototype]]` is internal and hidden, but there are many ways to set it. One of them is to use the special name `__proto__`, like this:
+
+```javascript
+let animal = {
+  eats: true,
+  walk: () => {
+    // ...
+  }
+};
+let rabbit = {
+  jumps: true
+};
+let longEar = {
+  earLength: 10,
+  __proto__: rabbit
+};
+
+rabbit.__proto__ = animal; // sets rabbit.[[Prototype]] = animal
+
+alert( rabbit.eats ); // true - from animal
+alert( rabbit.jumps ); // true - from rabbit
+alert( longEar.walk ); // calls animal.walk
+```
+
+There are only 3 limitations:
+
+1) The references can’t go in circles. JavaScript will throw an error if we try to assign `__proto__` in a circle.
+2) The value of `__proto__` can be either an object or null. Other types are ignored.
+3) Also it may be obvious, but still: there can be only one `[[Prototype]]`. An object may not inherit from two others.
 
 ### 3) What does 'this' mean?
 
