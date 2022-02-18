@@ -2,7 +2,12 @@
 
 ### 1) What is the difference between const, let, and var?
 
-Answer goes here
+| var | let | const |
+| --- | --- | --- |
+| The scope of the var keyword is the global or function scope. It means variables defined outside the function can be accessed globally, and variables defined inside a particular function can be accessed within the function. | The scope of a let variable is only block scoped. It can’t be accessible outside the particular block ({block}). | The scope of a const variable is only block scoped. It can’t be accessible outside the particular block ({block}). |
+| It can be updated and re-declared into the scope. | It can be updated but cannot be re-declared into the scope. | It cannot be updated or re-declared into the scope. |
+| It can be declared without initialization. | It can be declared without initialization. | It cannot be declared without initialization. |
+| Gets hoisted, which means it can be accessed without initialization as its default value is “undefined”. | It cannot be accessed without initialization, as it returns an error. | It cannot be accessed without initialization, as it cannot be declared without initialization. |
 
 ### 2) Explain prototypical inheritance
 
