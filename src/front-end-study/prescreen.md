@@ -1,6 +1,6 @@
 # Prescreen questions
 
-### 1) What is the difference between const, let, and var?
+## 1) What is the difference between const, let, and var?
 
 | var | let | const |
 | --- | --- | --- |
@@ -9,7 +9,7 @@
 | It can be declared without initialization. | It can be declared without initialization. | It cannot be declared without initialization. |
 | Gets hoisted, which means it can be accessed without initialization as its default value is “undefined”. | It cannot be accessed without initialization, as it returns an error. | It cannot be accessed without initialization, as it cannot be declared without initialization. |
 
-### 2) Explain prototypical inheritance
+## 2) Explain prototypical inheritance
 
 In JavaScript, objects have a special hidden property `[[Prototype]]` (as named in the specification), that is either null or references another object. That object is called “a prototype”.
 
@@ -45,30 +45,164 @@ There are only 3 limitations:
 2) The value of `__proto__` can be either an object or null. Other types are ignored.
 3) Also it may be obvious, but still: there can be only one `[[Prototype]]`. An object may not inherit from two others.
 
-### 3) What does 'this' mean?
+Please note that `__proto__` is not the same as the internal `[[Prototype]]` property. It’s a getter/setter for `[[Prototype]]`. It’s a common mistake of novice developers not to know the difference between these two.
+
+The `__proto__` property is a bit outdated. It exists for historical reasons, modern JavaScript suggests that we should use `Object.getPrototypeOf/Object.setPrototypeOf` functions instead that get/set the prototype.
+
+By the specification, `__proto__` must only be supported by browsers. In fact though, all environments including server-side support `__proto__`, so we’re quite safe using it.
+
+The prototype is only used for reading properties. Write/delete operations work directly with the object. In the example below, we assign its own walk method to rabbit:
+
+```javascript
+let animal = {
+  eats: true,
+  walk() { /* this method won't be used by rabbit */ }
+};
+
+let rabbit = {
+  __proto__: animal
+};
+
+rabbit.walk = function() {
+  alert("Rabbit! Bounce-bounce!");
+};
+
+rabbit.walk(); // Rabbit! Bounce-bounce!
+```
+From now on, rabbit.walk() call finds the method immediately in the object and executes it, without using the prototype.
+
+#### The value of 'this'
+
+`this` is not affected by prototypes at all.
+
+No matter where the method is found: in an object or its prototype. In a method call, `this` is always the object before the dot.
+
+That is actually a super-important thing, because we may have a big object with many methods, and have objects that inherit from it. And when the inheriting objects run the inherited methods, they will modify only their own states, not the state of the big object.
+
+For instance, here `animal` represents a “method storage”, and `rabbit` makes use of it.
+
+The call `rabbit.sleep()` sets `this.isSleeping` on the `rabbit` object:
+
+```javascript
+// animal has methods
+let animal = {
+  walk() {
+    if (!this.isSleeping) {
+      alert(`I walk`);
+    }
+  },
+  sleep() {
+    this.isSleeping = true;
+  }
+};
+
+let rabbit = {
+  name: "White Rabbit",
+  __proto__: animal
+};
+
+// modifies rabbit.isSleeping
+rabbit.sleep();
+
+alert(rabbit.isSleeping); // true
+alert(animal.isSleeping); // undefined (no such property in the prototype)
+```
+
+If we had other objects, like bird, snake, etc., inheriting from `animal`, they would also gain access to methods of `animal`. But this in each method call would be the corresponding object, evaluated at the call-time (before dot), not `animal`. So when we write data into this, it is stored into these objects.
+
+As a result, methods are shared, but the object state is not.
+
+#### for…in loop
+
+The `for..in` loop iterates over inherited properties too.
+
+For instance:
+
+```javascript
+let animal = {
+  eats: true
+};
+
+let rabbit = {
+  jumps: true,
+  __proto__: animal
+};
+
+// Object.keys only returns own keys
+alert(Object.keys(rabbit)); // jumps
+
+// for..in loops over both own and inherited keys
+for(let prop in rabbit) alert(prop); // jumps, then eats
+```
+
+If that’s not what we want, and we’d like to exclude inherited properties, there’s a built-in method `obj.hasOwnProperty(key)`: it returns true if obj has its own (not inherited) property named key.
+
+So we can filter out inherited properties (or do something else with them):
+
+```javascript
+let animal = {
+  eats: true
+};
+
+let rabbit = {
+  jumps: true,
+  __proto__: animal
+};
+
+for(let prop in rabbit) {
+  let isOwn = rabbit.hasOwnProperty(prop);
+
+  if (isOwn) {
+    alert(`Our: ${prop}`); // Our: jumps
+  } else {
+    alert(`Inherited: ${prop}`); // Inherited: eats
+  }
+}
+```
+
+Here we have the following inheritance chain: `rabbit` inherits from `animal`, that inherits from `Object.prototype` (because `animal` is a literal object {...}, so it’s by default), and then null above it:
+
+Note, there’s one funny thing. Where is the method `rabbit.hasOwnProperty` coming from? We did not define it. Looking at the chain we can see that the method is provided by `Object.prototype.hasOwnProperty`. In other words, it’s inherited.
+
+…But why does `hasOwnProperty` not appear in the `for..in` loop like `eats` and `jumps` do, if `for..in` lists inherited properties?
+
+The answer is simple: it’s not enumerable. Just like all other properties of `Object.prototype`, it has `enumerable:false` flag. And `for..in` only lists enumerable properties. That’s why it and the rest of the `Object.prototype` properties are not listed.
+
+Almost all other key/value-getting methods, such as Object.keys, Object.values and so on ignore inherited properties. They only operate on the object itself. Properties from the prototype are not taken into account.
+
+#### Summary
+* In JavaScript, all objects have a hidden `[[Prototype]]` property that’s either another object or null.
+* We can use `obj.__proto__` to access it (a historical getter/setter, there are other ways, to be covered soon).
+* The object referenced by `[[Prototype]]` is called a “prototype”.
+* If we want to read a property of obj or call a method, and it doesn’t exist, then JavaScript tries to find it in the prototype.
+* Write/delete operations act directly on the object, they don’t use the prototype (assuming it’s a data property, not a setter).
+* If we call `obj.method()`, and the method is taken from the prototype, `this` still references `obj`. So methods always work with the current object even if they are inherited.
+* The `for..in` loop iterates over both its own and its inherited properties. All other key/value-getting methods only operate on the object itself.
+
+## 3) What does 'this' mean?
 
 Answer goes here
 
-### 4) What is the data structure of the DOM?
+## 4) What is the data structure of the DOM?
 
 Answer goes here
 
-### 5) What is a Stack and a Queue? How would you create those data structures in JavaScript?
+## 5) What is a Stack and a Queue? How would you create those data structures in JavaScript?
 
 Answer goes here
 
-### 6) How can you tell if an image element is loaded on a page?
+## 6) How can you tell if an image element is loaded on a page?
 
 Answer goes here
 
-### 7) What is call() and apply()?
+## 7) What is call() and apply()?
 
 Answer goes here
 
-### 8) What is event delegation?
+## 8) What is event delegation?
 
 Answer goes here
 
-### 9) What is a Worker? When would you use one?
+## 9) What is a Worker? When would you use one?
 
 Answer goes here
