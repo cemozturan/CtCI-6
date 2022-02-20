@@ -275,11 +275,48 @@ Hard binding is a perfect way to lock a context into a function call and truly m
 
 ## 4) What is the data structure of the DOM?
 
-Answer goes here
+The Document Object Model (DOM) is a cross-platform and language-independent interface that treats an XML or HTML document as a tree structure wherein each node is an object representing a part of the document.
 
 ## 5) What is a Stack and a Queue? How would you create those data structures in JavaScript?
 
-Answer goes here
+#### Stack
+
+A stack data structure is a LIFO one (last in first out), the most recent element added to the stack should be the first out. It two fundamental operations:
+
+* push — insert/push a new element to the stack.
+* pop — remove the most recent element from the stack.
+
+A stack is a linear data structure, which means that all elements are arranged in sequential order. It results that the `push` and `pop` operations can only happen at one end of the structure, in this case, the top of the stack.
+
+Sometimes there can be more than two operations in a stack data structure. Sometimes we might use the `isEmpty` operation to check if the stack is empty, and the `peek` operation to return the top element without modifying the stack.
+
+The nice thing about working with stack data structures in JavaScript is that JavaScript already provides us the `push` and `pop` methods that we discussed. The `push` method adds an element to an array and the `pop` method removes the last element from an array.
+
+We can start our stack by creating a new array named `stack`:
+```javascript
+let stack = [];
+const push = (item) => stack.push(item);
+const pop = () => stack.pop();
+```
+We can also implement a stack data structure in JavaScript using classes. Here’s how we can do it:
+```javascript
+class Stack {
+ constructor() {
+   this.stack = [];
+ }
+ push(item) {
+   this.stack.push(item);
+ }
+ pop() {
+   this.stack.pop();
+ }
+}
+```
+Some developers like to implement stack data structures using linked lists instead of arrays in JavaScript. Although this might feel like a clever solution, the performance might not be the best one. There are some specific cases where linked lists can perform better than arrays, but when implementing stack data structures in JavaScript, always prefer arrays. The array methods that you are going to use, `push` and `pop`, will have a time complexity of O(1), which means that they will run efficiently and will have the best performance possible.
+
+#### Queue
+
+Queue goes here
 
 ## 6) How can you tell if an image element is loaded on a page?
 
