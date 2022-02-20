@@ -181,7 +181,97 @@ Almost all other key/value-getting methods, such as Object.keys, Object.values a
 
 ## 3) What does 'this' mean?
 
-Answer goes here
+`this` automatically resolves to an object or scope depending on the context at which is was defined.
+
+There are generally four kinds of bindings in JS:
+
+* Default Binding
+* Implicit Binding
+* Explicit Binding
+* Constructor Call Binding
+
+#### Default Binding in JavaScript
+One of the first rules to remember is that if the function housing a this reference is a standalone function, then that function is bound to the global object.
+
+```javascript
+function alert() { 
+  console.log(this.name + ' is calling'); 
+}
+
+const name = 'Kingsley'; 
+alert(); // Kingsley is calling
+```
+
+As you can see, `name()` is a standalone, unattached function, so it is bound to the global scope. As a result, the `this.name` reference resolves to the global variable `const name = 'Kingsley'`. Note that, when set in strict mode, the `this` reference is set to `undefined`. If we had `'use strict'` before calling `this.name`, we would get a `this is undefined` type error.
+
+#### Implicit Binding in JavaScript
+According to the binding rule in JavaScript, a function can use an object as its context only if that object is bound to it at the call site. This form of binding is known as implicit binding.
+
+Put simply, when you call a function using dot notation, `this` is implicitly bound to the object the function is being called from.
+
+```javascript
+function alert() { 
+  console.log(this.age); 
+}
+
+const myObj = {
+  age: 22,
+  alert: alert,
+  nestedObj: {
+    age: 26,
+    alert: alert
+  }
+}
+
+myObj.alert(); // `this` is bound to `myObj` -- 22
+myObj.nestedObj.alert(); // `this` is bound to `nestedObj` -- 26
+```
+
+In this example, since `alert` is being called from `myObj`, the `this` keyword is bound to `myObj`. So when `alert` is called with ``.alert()`, `this.age` is 22, which is the `age` property of `myObj`.
+
+An easy way to figure out which object `this` is implicitly bound to is to look at which object is to the left of the dot (.).
+
+#### Explicit binding in JavaScript
+We saw that implicit binding had to do with having a reference in that object, but what if we want to force a function to use an object as its context without putting a property function reference on the object?
+
+We have two utility methods to achieve this: `call()` and `apply()`. Along with a couple other set of utility functions, these two utilities are available to all functions in JavaScript via the `[[Prototype]`] mechanism.
+
+To explicitly bind a function call to a context, you simply have to invoke the `call()` on that function and pass in the context object as parameter:
+
+```javascript
+function alert() { 
+  console.log(this.age + ' years old'); 
+}
+
+const myObj = {
+  age: 22
+}
+
+alert.call(myObj); // 22 years old
+```
+
+Now here's the fun part. Even if you were to pass around that function multiple times to new variables (currying), every invocation will use the same context because it has been locked (explicitly bound) to that object. This is called hard binding.
+
+```javascript
+function alert() { 
+  console.log(this.age); 
+} 
+
+const myObj = { 
+  age: 22 
+}; 
+
+const bar = function() { 
+  alert.call(myObj); 
+}; 
+
+bar(); // 22
+setTimeout(bar, 100); // 22 
+// a hard-bound `bar` can no longer have its `this` context overridden 
+bar.call(window); // still 22
+```
+
+Hard binding is a perfect way to lock a context into a function call and truly make that function into a method.
 
 ## 4) What is the data structure of the DOM?
 
