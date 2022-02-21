@@ -372,8 +372,33 @@ queue.length;    // => 3
 
 ## 6) How can you tell if an image element is loaded on a page?
 
-Answer goes here
+Using attributes of `<img>` to check whether an image is loaded or not. The attributes we will use are: 
 
+* onload - The `onload` event is triggered when a image is loaded and is executed
+* onerror - The `onerror` event is triggered if an error occurs during the execution
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image load check</title>
+  </head>
+  <body>
+    <img src="some-image-url.png"
+     onload="javascript: alert('The image has been loaded')"
+     onerror="javascript: alert('The image has failed to load')" />
+  </body>
+</html>
+```
+
+Another option is to use the `HTMLImageElement` interface’s `complete` attribute. It returns true if the image has completely loaded and false otherwise. We can use this with `naturalWidth` or `naturalHeight` properties, which would return 0 when the image failed to load.
+```javascript
+window.addEventListener("load", event => {
+    var image = document.querySelector('img');
+    var isLoaded = image.complete && image.naturalHeight !== 0;
+    alert(isLoaded);
+});
+```
 ## 7) What is call() and apply()?
 
 Answer goes here
