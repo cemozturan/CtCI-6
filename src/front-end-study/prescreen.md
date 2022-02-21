@@ -316,7 +316,59 @@ Some developers like to implement stack data structures using linked lists inste
 
 #### Queue
 
-Queue goes here
+A queue data structure is a FIFO one, the first element to be removed will be the first element added to the queue.
+
+A queue data structure has two fundamental operations:
+
+* enqueue — insert/push a new element to the queue.
+* dequeue — remove the oldest element from the queue.
+
+Similar to a stack, we have a linear data structure, which means that all the operations in a queue can only happen at one end of the structure, in this case, the beginning of the queue.
+
+JavaScript is a very helpful and handy language that provides us a lot of different methods to help us to achieve better results. The nice thing about JavaScript is that we also have a method to remove the first element of an array, which is the `shift` array method.
+
+The implementation of a queue in JavaScript gets very simple and powerful. We can define our queue array like the following:
+```javascript
+let stack = [];
+const enqueue = (item) => queue.push(item);
+const dequeue = () => queue.shift();
+```
+Pretty easy, huh? But there are some hidden differences that we might not notice at first, specifically about performance. Remember that both the `push` and `pop` methods have a time complexity of O(1)? The `shift` method has a time complexity of O(n).
+
+A simple difference in the time complexity of a piece of code can make a total difference in money, costs and performance for a company. If you’re planning to work with a queue data structure, the best possible idea is to create your own queue.
+```javascript
+class Queue {
+  constructor() {
+    this.items = {};
+    this.headIndex = 0;
+    this.tailIndex = 0;
+  }
+  enqueue(item) {
+    this.items[this.tailIndex] = item;
+    this.tailIndex++;
+  }
+  dequeue() {
+    const item = this.items[this.headIndex];
+    delete this.items[this.headIndex];
+    this.headIndex++;
+    return item;
+  }
+  peek() {
+    return this.items[this.headIndex];
+  }
+  get length() {
+    return this.tailIndex - this.headIndex;
+  }
+}
+const queue = new Queue();
+queue.enqueue(7);
+queue.enqueue(2);
+queue.enqueue(6);
+queue.enqueue(4);
+queue.dequeue(); // => 7
+queue.peek();    // => 2
+queue.length;    // => 3
+```
 
 ## 6) How can you tell if an image element is loaded on a page?
 
